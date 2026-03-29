@@ -6,37 +6,52 @@
 <title>Happy Birthday Bibi 💖</title>
 
 <style>
+/* RESET DASAR (WAJIB BIAR GAK BUG) */
+* {
+  box-sizing: border-box;
+}
+
 html, body {
   margin: 0;
   padding: 0;
-  min-height: 100vh;
+  height: 100%;
 }
 
+/* FIX BACKGROUND (ANTI PUTIH) */
 body {
   font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #ff4e50, #fc913a);
+  background-color: #ff4e50; /* fallback wajib */
+  background-image: linear-gradient(135deg, #ff4e50, #fc913a);
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-size: cover;
   color: white;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   overflow-x: hidden;
 }
 
-/* container jadi card */
+/* CONTAINER */
 .container {
   text-align: center;
   padding: 25px;
   border-radius: 25px;
+
+  /* fallback kalau blur gak support */
+  background: rgba(0,0,0,0.0);
+
+  /* kalau support, baru pakai blur */
   backdrop-filter: blur(10px);
-  background: rgba(255,255,255,0.1);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  -webkit-backdrop-filter: blur(10px);
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   max-width: 400px;
   width: 90%;
 }
 
-/* judul */
+/* JUDUL */
 h1 {
   font-size: 30px;
   margin-bottom: 5px;
@@ -48,7 +63,6 @@ h2 {
   font-weight: normal;
 }
 
-/* glow lebih halus */
 @keyframes glow {
   from {text-shadow: 0 0 8px white;}
   to {text-shadow: 0 0 20px #ffe066;}
@@ -59,7 +73,7 @@ p {
   line-height: 1.5;
 }
 
-/* slider */
+/* SLIDER */
 .slider {
   margin-top: 15px;
   position: relative;
@@ -70,11 +84,14 @@ p {
   width: 100%;
   max-width: 230px;
   border-radius: 20px;
+
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+
   opacity: 0;
   transition: opacity 1s ease;
+
   box-shadow: 0 0 20px rgba(255,255,255,0.6);
 }
 
@@ -82,7 +99,7 @@ p {
   opacity: 1;
 }
 
-/* tombol */
+/* BUTTON */
 button {
   padding: 12px 25px;
   border: none;
@@ -100,7 +117,7 @@ button:hover {
   background: #ffeaea;
 }
 
-/* surprise */
+/* SURPRISE */
 #surprise {
   margin-top: 20px;
   animation: fadeIn 1s ease;
@@ -111,13 +128,14 @@ button:hover {
   to {opacity: 1; transform: translateY(0);}
 }
 
-/* love effect */
+/* LOVE EFFECT */
 .love {
   position: fixed;
   font-size: 18px;
   top: -20px;
   animation: fall linear infinite;
   opacity: 0.7;
+  pointer-events: none;
 }
 
 @keyframes fall {
@@ -131,8 +149,8 @@ button:hover {
   display: none;
 }
 </style>
-
 </head>
+
 <body>
 
 <div class="container">
@@ -146,7 +164,6 @@ button:hover {
     Aku sayang kamu, sekarang dan selamanya ❤️
   </p>
 
-  <!-- FOTO (SUDAH NYATU) -->
   <div class="slider">
     <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..." class="active">
     <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD...">
@@ -165,22 +182,27 @@ button:hover {
   </div>
 </div>
 
-<audio autoplay loop>
+<audio id="music" loop>
   <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3">
 </audio>
 
 <script>
-// love jatuh
+// AUTOPLAY FIX (Chrome butuh interaksi)
+document.body.addEventListener("click", () => {
+  document.getElementById("music").play();
+}, { once: true });
+
+// LOVE EFFECT
 for (let i = 0; i < 40; i++) {
   let love = document.createElement("div");
-  love.classList.add("love");
+  love.className = "love";
   love.innerHTML = "💖";
   love.style.left = Math.random() * 100 + "vw";
   love.style.animationDuration = (Math.random() * 3 + 2) + "s";
   document.body.appendChild(love);
 }
 
-// slider
+// SLIDER
 let index = 0;
 let images = document.querySelectorAll(".slider img");
 
@@ -190,7 +212,7 @@ setInterval(() => {
   images[index].classList.add("active");
 }, 2500);
 
-// tombol
+// BUTTON
 function showSurprise() {
   document.getElementById("surprise").classList.remove("hidden");
 }
